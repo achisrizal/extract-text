@@ -8,14 +8,16 @@
       /* Selalu menggunakan Dark Mode */
       body {
         font-family: Arial, sans-serif;
-        padding: 20px;
+        padding: 5px;
         background-color: #121212; /* Latar belakang gelap */
         color: #e0e0e0; /* Teks terang */
         transition: background-color 0.3s, color 0.3s;
       }
+
       h1 {
         color: #000;
       }
+
       input,
       button {
         padding: 10px;
@@ -25,6 +27,16 @@
         color: #000; /* Teks putih */
         border: 1px solid #444;
       }
+
+      input[type="text"] {
+        flex: 1; /* Input akan mengisi ruang yang tersedia */
+        max-width: 400px; /* Lebar maksimum input */
+        min-width: 100px; /* Lebar minimum input */
+        background-color: #333; /* Latar belakang gelap untuk input */
+        color: #fff; /* Teks putih */
+        border: 1px solid #444;
+      }
+
       #hasil {
         margin-top: 20px;
         white-space: pre-wrap; /* Agar teks tampil dengan baris baru */
@@ -42,11 +54,23 @@
         /* padding: 10px; */
         font-size: 16px;
       }
+
+      .form-container {
+        display: flex;
+        justify-content: center; /* Posisikan elemen input dan tombol di tengah */
+        gap: 10px; /* Jarak antara input dan tombol */
+        max-width: 600px;
+        margin: 0 auto;
+        width: 100%;
+        flex-wrap: wrap; /* Agar elemen dapat berpindah baris di layar kecil */
+      }
     </style>
   </head>
   <body>
-    <input type="text" id="urlInput" placeholder="https://example.com" />
-    <button onclick="ambilTeks()">Ambil Teks</button>
+    <div class="form-container">
+      <input type="text" id="urlInput" />
+      <button onclick="ambilTeks()">Get</button>
+    </div>
 
     <div id="hasil"></div>
 
