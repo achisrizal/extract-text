@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ambil Teks dari Elemen &lt;p&gt; Website Lain</title>
+    <style>
+      /* Selalu menggunakan Dark Mode */
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        background-color: #121212; /* Latar belakang gelap */
+        color: #e0e0e0; /* Teks terang */
+        transition: background-color 0.3s, color 0.3s;
+      }
+      h1 {
+        color: #000;
+      }
+      input,
+      button {
+        padding: 10px;
+        font-size: 16px;
+        margin-top: 10px;
+        background-color: #333; /* Latar belakang gelap untuk input dan tombol */
+        color: #000; /* Teks putih */
+        border: 1px solid #444;
+      }
+      #hasil {
+        margin-top: 20px;
+        white-space: pre-wrap; /* Agar teks tampil dengan baris baru */
+        font-family: monospace;
+        background-color: #333; /* Latar belakang gelap untuk hasil */
+        color: #121212;
+        padding: 10px;
+        border-radius: 4px;
+        /* max-height: 100vh; Mengatur tinggi maksimal sesuai tinggi layar */
+        /* overflow-y: auto; Jika teks melebihi tinggi, maka akan muncul scrollbar */
+      }
+
+      .color-picker {
+        margin-top: 20px;
+        /* padding: 10px; */
+        font-size: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <input type="text" id="urlInput" placeholder="https://example.com" />
+    <button onclick="ambilTeks()">Ambil Teks</button>
+
+    <div id="hasil"></div>
+
+    <div class="color-picker">
+      <input
+        type="color"
+        id="textColor"
+        value="#e0e0e0"
+        onchange="ubahWarnaTeks(event)"
+      />
+    </div>
+
+    <script>
+      // Fungsi untuk mengambil teks dari elemen <p>
+      async function ambilTeks() {
+        const url = document.getElementById("urlInput").value.trim(); // Ambil URL dari input
+        if (!url) {
+          alert("URL tidak boleh kosong!");
+          return;
+        }
+
+        try {
+          // Menggunakan API proxy AllOrigins untuk menghindari masalah CORS
+          const response = await fetch(
+            "https://api.allorigins.win/get?url=" + encodeURIComponent(url)
+          );
+          const data = await response.json();
+
+          if (data.contents) {
+            const htmlContent = data.contents;
+
+            // Menyaring hanya teks dari elemen <p> dalam konten HTML
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(htmlContent, "text/html");
+            const pElements = doc.querySelectorAll("p"); // Ambil semua elemen <p>
+
+            let combinedText = "";
+            pElements.forEach((p) => {
+              combinedText += p.innerText + "\n"; // Gabungkan teks dari setiap elemen <p>
+            });
+
+            // Menampilkan teks di halaman
+            document.getElementById("hasil").innerText = combinedText;
+          } else {
+            alert("Gagal mengambil konten dari URL tersebut.");
+          }
+        } catch (error) {
+          console.error("Terjadi kesalahan:", error);
+          alert("Terjadi kesalahan dalam mengambil data.");
+        }
+      }
+
+      // Fungsi untuk mengubah warna teks
+      function ubahWarnaTeks(event) {
+        const color = event.target.value;
+        document.getElementById("hasil").style.color = color; // Ubah warna teks pada #hasil
+      }
+    </script>
+  </body>
+</html>
