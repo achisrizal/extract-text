@@ -33,7 +33,7 @@
         max-width: 400px; /* Lebar maksimum input */
         min-width: 100px; /* Lebar minimum input */
         background-color: #333; /* Latar belakang gelap untuk input */
-        color: #fff; /* Teks putih */
+        color: #000; /* Teks putih */
         border: 1px solid #444;
       }
 
@@ -45,6 +45,7 @@
         color: #121212;
         padding: 10px;
         border-radius: 4px;
+        font-size: 16px;
         /* max-height: 100vh; Mengatur tinggi maksimal sesuai tinggi layar */
         /* overflow-y: auto; Jika teks melebihi tinggi, maka akan muncul scrollbar */
       }
@@ -57,9 +58,9 @@
 
       .form-container {
         display: flex;
-        justify-content: center; /* Posisikan elemen input dan tombol di tengah */
+        justify-content: left; /* Posisikan elemen input dan tombol di tengah */
         gap: 10px; /* Jarak antara input dan tombol */
-        max-width: 600px;
+        /* max-width: 600px; */
         margin: 0 auto;
         width: 100%;
         flex-wrap: wrap; /* Agar elemen dapat berpindah baris di layar kecil */
@@ -109,7 +110,7 @@
 
             let combinedText = "";
             pElements.forEach((p) => {
-              combinedText += p.innerText + "\n"; // Gabungkan teks dari setiap elemen <p>
+              combinedText += p.innerText + "\n\n"; // Gabungkan teks dari setiap elemen <p>
             });
 
             // Menampilkan teks di halaman
