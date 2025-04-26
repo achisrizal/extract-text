@@ -41,7 +41,12 @@
         margin-top: 20px;
         white-space: pre-wrap; /* Agar teks tampil dengan baris baru */
         font-family: monospace;
-        background-color: #333; /* Latar belakang gelap untuk hasil */
+        /* background-color: #333; Latar belakang gelap untuk hasil */
+        background: linear-gradient(
+          to bottom,
+          #444 15%,
+          #333 15%
+        ); /* Latar belakang gelap untuk hasil */
         color: #121212;
         padding: 10px;
         border-radius: 4px;
@@ -153,7 +158,9 @@
       // Fungsi untuk mengubah warna latar belakang hasil
       function ubahWarnaBackground(event) {
         const color = event.target.value;
-        document.getElementById("hasil").style.backgroundColor = color;
+        document.getElementById(
+          "hasil"
+        ).style.background = `linear-gradient(to bottom, ${color} 15%, #121212 15%)`;
       }
     </script>
   </body>
