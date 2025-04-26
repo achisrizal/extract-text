@@ -46,14 +46,17 @@
         padding: 10px;
         border-radius: 4px;
         font-size: 16px;
-        /* max-height: 100vh; Mengatur tinggi maksimal sesuai tinggi layar */
-        /* overflow-y: auto; Jika teks melebihi tinggi, maka akan muncul scrollbar */
+        max-height: 30vh; /* Mengatur tinggi maksimal sesuai tinggi layar */
+        overflow-y: auto; /* Jika teks melebihi tinggi, maka akan muncul scrollbar */
       }
 
       .color-picker {
         margin-top: 20px;
         /* padding: 10px; */
         font-size: 16px;
+        display: flex;
+        gap: 10px;
+        align-items: center;
       }
 
       .form-container {
@@ -82,8 +85,14 @@
         value="#e0e0e0"
         onchange="ubahWarnaTeks(event)"
       />
-    </div>
 
+      <input
+        type="color"
+        id="bgColor"
+        value="#333333"
+        onchange="ubahWarnaBackground(event)"
+      />
+    </div>
     <script>
       // Fungsi untuk mengambil teks dari elemen <p>
       async function ambilTeks() {
@@ -106,11 +115,22 @@
             // Menyaring hanya teks dari elemen <p> dalam konten HTML
             const parser = new DOMParser();
             const doc = parser.parseFromString(htmlContent, "text/html");
-            const pElements = doc.querySelectorAll("p"); // Ambil semua elemen <p>
+            const pElements = doc.querySelectorAll("article p"); // Ambil semua elemen <p>
+            const aElements = doc.querySelectorAll(
+              ".main-pagination a, .navigate-posts a"
+            ); // Ambil semua elemen <a>
 
             let combinedText = "";
             pElements.forEach((p) => {
               combinedText += p.innerText + "\n\n"; // Gabungkan teks dari setiap elemen <p>
+            });
+
+            // Ambil hanya <a> yang mengandung 'youtube.com' di href-nya
+            aElements.forEach((a) => {
+              const href = a.getAttribute("href");
+              if (href && href.includes("ngocoks.com/")) {
+                combinedText += `${a.innerText} → ${href}\n\n`; // Bisa juga hanya href atau hanya teks
+              }
             });
 
             // Menampilkan teks di halaman
@@ -128,6 +148,12 @@
       function ubahWarnaTeks(event) {
         const color = event.target.value;
         document.getElementById("hasil").style.color = color; // Ubah warna teks pada #hasil
+      }
+
+      // Fungsi untuk mengubah warna latar belakang hasil
+      function ubahWarnaBackground(event) {
+        const color = event.target.value;
+        document.getElementById("hasil").style.backgroundColor = color;
       }
     </script>
   </body>
