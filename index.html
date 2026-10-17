@@ -1,284 +1,301 @@
 <!DOCTYPE html>
 <html lang="id">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>~</title>
     <style>
-      /* Selalu menggunakan Dark Mode */
-      body {
-        font-family: Arial, sans-serif;
-        /* padding: 5px; */
-        background-color: #121212; /* Latar belakang gelap */
-        color: #e0e0e0; /* Teks terang */
-        transition: background-color 0.3s, color 0.3s;
-      }
-
-      body {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between; /* Penting untuk dorong #hasil ke bawah */
-        min-height: 100vh;
-        font-family: Arial, sans-serif;
-        background-color: #121212;
-        color: #e0e0e0;
-        margin: 0;
-        padding: 0 10px;
-        box-sizing: border-box;
-      }
-
-      h1 {
-        color: #000;
-      }
-
-      input,
-      button {
-        padding: 10px;
-        font-size: 16px;
-        margin-top: 10px;
-        background-color: #333; /* Latar belakang gelap untuk input dan tombol */
-        color: #121212;
-        border: 1px solid #444;
-      }
-
-      input[type="text"] {
-        flex: 1; /* Input akan mengisi ruang yang tersedia */
-        max-width: 400px; /* Lebar maksimum input */
-        min-width: 100px; /* Lebar minimum input */
-        background-color: #333; /* Latar belakang gelap untuk input */
-        color: #252525;
-        border: 1px solid #444;
-      }
-
-      #hasil {
-        margin-top: 20px;
-        white-space: pre-wrap; /* Agar teks tampil dengan baris baru */
-        font-family: monospace;
-        background: linear-gradient(
-          to bottom,
-          #444 20%,
-          #333 20%
-        ); /* Latar belakang gelap untuk hasil */
-        color: #121212;
-        padding: 10px;
-        border-radius: 4px;
-        font-size: 16px;
-        max-height: 30vh; /* Mengatur tinggi maksimal sesuai tinggi layar */
-        overflow-y: auto; /* Jika teks melebihi tinggi, maka akan muncul scrollbar */
-      }
-
-      .color-picker {
-        /* margin-top: 20px; */
-        font-size: 16px;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-        align-items: center;
-        justify-content: space-between;
-        width: 100%;
-        max-width: 100%;
-        box-sizing: border-box;
-      }
-
-      .form-container {
-        display: flex;
-        justify-content: left; /* Posisikan elemen input dan tombol di tengah */
-        gap: 10px; /* Jarak antara input dan tombol */
-        /* max-width: 600px; */
-        margin: 0 auto;
-        width: 100%;
-        flex-wrap: wrap; /* Agar elemen dapat berpindah baris di layar kecil */
-      }
-
-      /* Spinner Fullscreen */
-      .loading-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        background-color: rgba(18, 18, 18, 0.8); /* Transparan gelap */
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        z-index: 9999;
-      }
-
-      .spinner {
-        width: 60px;
-        height: 60px;
-        border: 6px solid #333;
-        border-top: 6px solid #444;
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-        margin-bottom: 15px;
-      }
-
-      @keyframes spin {
-        to {
-          transform: rotate(360deg);
+        /* Selalu menggunakan Dark Mode */
+        body {
+            font-family: Arial, sans-serif;
+            /* padding: 5px; */
+            background-color: #121212;
+            /* Latar belakang gelap */
+            color: #e0e0e0;
+            /* Teks terang */
+            transition: background-color 0.3s, color 0.3s;
         }
-      }
-    </style>
-  </head>
-  <body>
-    <div class="form-container">
-      <input type="text" id="urlInput" />
-      <button onclick="ambilTeks()">Get</button>
 
-      <div class="color-picker">
-        <input
-          type="color"
-          id="textColor"
-          value="#333333"
-          onchange="ubahWarnaTeks(event)"
-        />
-        <input
-          type="color"
-          id="bgTopColor"
-          value="#333333"
-          onchange="ubahGradient()"
-        />
-        <input
-          type="color"
-          id="bgBottomColor"
-          value="#333333"
-          onchange="ubahGradient()"
-        />
-      </div>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            /* Penting untuk dorong #hasil ke bawah */
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #e0e0e0;
+            margin: 0;
+            padding: 0 10px;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            color: #000;
+        }
+
+        input,
+        button {
+            padding: 10px;
+            font-size: 16px;
+            margin-top: 10px;
+            background-color: #333;
+            /* Latar belakang gelap untuk input dan tombol */
+            color: #121212;
+            border: 1px solid #444;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            /* Input akan mengisi ruang yang tersedia */
+            max-width: 400px;
+            /* Lebar maksimum input */
+            min-width: 100px;
+            /* Lebar minimum input */
+            background-color: #333;
+            /* Latar belakang gelap untuk input */
+            color: #252525;
+            border: 1px solid #444;
+        }
+
+        #hasil {
+            margin-top: 20px;
+            white-space: pre-wrap;
+            /* Agar teks tampil dengan baris baru */
+            font-family: monospace;
+            background: linear-gradient(to bottom,
+                    #444 20%,
+                    #333 20%);
+            /* Latar belakang gelap untuk hasil */
+            color: #121212;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 16px;
+            max-height: 30vh;
+            /* Mengatur tinggi maksimal sesuai tinggi layar */
+            overflow-y: auto;
+            /* Jika teks melebihi tinggi, maka akan muncul scrollbar */
+        }
+
+        .color-picker {
+            /* margin-top: 20px; */
+            font-size: 16px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+
+        .form-container {
+            display: flex;
+            justify-content: left;
+            /* Posisikan elemen input dan tombol di tengah */
+            gap: 10px;
+            /* Jarak antara input dan tombol */
+            /* max-width: 600px; */
+            margin: 0 auto;
+            width: 100%;
+            flex-wrap: wrap;
+            /* Agar elemen dapat berpindah baris di layar kecil */
+        }
+
+        /* Spinner Fullscreen */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(18, 18, 18, 0.8);
+            /* Transparan gelap */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 6px solid #333;
+            border-top: 6px solid #444;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="form-container">
+        <input type="text" id="urlInput" />
+        <button onclick="ambilTeks()">Get</button>
+
+        <div class="color-picker">
+            <input type="color" id="textColor" value="#333333" onchange="ubahWarnaTeks(event)" />
+            <input type="color" id="bgTopColor" value="#333333" onchange="ubahGradient()" />
+            <input type="color" id="bgBottomColor" value="#333333" onchange="ubahGradient()" />
+        </div>
     </div>
 
     <div id="hasil"></div>
 
     <div id="loadingOverlay" class="loading-overlay" style="display: none">
-      <div class="spinner"></div>
+        <div class="spinner"></div>
     </div>
 
-      <script>
-  async function fetchDenganFallback(url) {
-    const proxies = [
-      {
-        nama: "AllOrigins",
-        url: (u) =>
-          `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
-      },
-      {
-        nama: "CorsProxy",
-        url: (u) =>
-          `https://corsproxy.io/?${encodeURIComponent(u)}`,
-      },
-      {
-        nama: "CodeTabs",
-        url: (u) =>
-          `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(u)}`,
-      },
-    ];
+    <script>
+        async function fetchDenganFallback(url) {
+            const proxies = [
+                {
+                    nama: "AllOrigins",
+                    url: (u) =>
+                        `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
+                },
+                {
+                    nama: "CodeTabs",
+                    url: (u) =>
+                        `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(u)}`,
+                },
+                {
+                    nama: "CorsProxy.org",
+                    url: (u) =>
+                        `https://corsproxy.org/?${encodeURIComponent(u)}`,
+                },
+                {
+                    nama: "ThingProxy",
+                    url: (u) => `https://thingproxy.freeboard.io/fetch/${u}`,
+                },
+                {
+                    nama: "CorsLol",
+                    url: (u) =>
+                        `https://api.cors.lol/?url=${encodeURIComponent(u)}`,
+                },
+            ];
 
-    const daftarError = [];
+            // Tambahkan https:// jika user tidak menulis protokol
+            if (!/^https?:\/\//i.test(url)) {
+                url = "https://" + url;
+            }
 
-    for (const proxy of proxies) {
-      try {
-        const proxyUrl = proxy.url(url);
+            const daftarError = [];
 
-        const response = await fetch(proxyUrl);
+            for (const proxy of proxies) {
+                try {
+                    const proxyUrl = proxy.url(url);
 
-        if (!response.ok) {
-          let body = "";
+                    const response = await fetch(proxyUrl, {
+                        signal: AbortSignal.timeout(15000),
+                    });
 
-          try {
-            body = await response.text();
-          } catch {
-            body = "(Tidak ada response body)";
-          }
+                    if (!response.ok) {
+                        let body = "";
 
-          daftarError.push(
-`PROXY  : ${proxy.nama}
+                        try {
+                            body = await response.text();
+                        } catch {
+                            body = "(Tidak ada response body)";
+                        }
+
+                        daftarError.push(
+                            `PROXY  : ${proxy.nama}
 STATUS : ${response.status} ${response.statusText}
 URL    : ${proxyUrl}
 
 RESPONSE:
 ${body}`
-          );
+                        );
 
-          continue;
-        }
+                        continue;
+                    }
 
-        return {
-          proxy: proxy.nama,
-          proxyUrl,
-          html: await response.text(),
-        };
-      } catch (err) {
-        daftarError.push(
-`PROXY  : ${proxy.nama}
+                    return {
+                        proxy: proxy.nama,
+                        proxyUrl,
+                        html: await response.text(),
+                    };
+                } catch (err) {
+                    daftarError.push(
+                        `PROXY  : ${proxy.nama}
 STATUS : FETCH ERROR
 URL    : ${proxy.url(url)}
 
 PESAN:
 ${err.message}`
-        );
-      }
-    }
+                    );
+                }
+            }
 
-    throw new Error(
-      daftarError.join(
-`\n\n==========\n\n`
-      )
-    );
-  }
-
-  async function ambilTeks() {
-    const url = document.getElementById("urlInput").value.trim();
-
-    if (!url) {
-      alert("URL tidak boleh kosong!");
-      return;
-    }
-
-    document.getElementById("loadingOverlay").style.display = "flex";
-
-    try {
-      const result = await fetchDenganFallback(url);
-
-      const proxyBerhasil = result.proxy;
-      const proxyUrl = result.proxyUrl;
-      const htmlContent = result.html;
-
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(htmlContent, "text/html");
-
-      const pElements = doc.querySelectorAll("article p");
-
-      const aElements = doc.querySelectorAll(
-        ".main-pagination a, .navigate-posts a"
-      );
-
-      let combinedText = "";
-
-      pElements.forEach((p) => {
-        combinedText += p.innerText + "\n\n";
-      });
-
-      aElements.forEach((a) => {
-        const href = a.getAttribute("href");
-
-        if (href && href.includes("ngocoks.com/")) {
-          combinedText += `${a.innerText} → ${href}\n\n`;
+            throw new Error(
+                daftarError.join(
+                    `\n\n==========\n\n`
+                )
+            );
         }
-      });
 
-      if (!combinedText.trim()) {
-        combinedText =
-`Halaman berhasil diambil.
+        async function ambilTeks() {
+            const url = document.getElementById("urlInput").value.trim();
+
+            if (!url) {
+                alert("URL tidak boleh kosong!");
+                return;
+            }
+
+            document.getElementById("loadingOverlay").style.display = "flex";
+
+            try {
+                const result = await fetchDenganFallback(url);
+
+                const proxyBerhasil = result.proxy;
+                const proxyUrl = result.proxyUrl;
+                const htmlContent = result.html;
+
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(htmlContent, "text/html");
+
+                const pElements = doc.querySelectorAll("article p");
+
+                const aElements = doc.querySelectorAll(
+                    ".main-pagination a, .navigate-posts a"
+                );
+
+                let combinedText = "";
+
+                pElements.forEach((p) => {
+                    combinedText += p.innerText + "\n\n";
+                });
+
+                aElements.forEach((a) => {
+                    const href = a.getAttribute("href");
+
+                    if (href && href.includes("ngocoks.com/")) {
+                        combinedText += `${a.innerText} → ${href}\n\n`;
+                    }
+                });
+
+                if (!combinedText.trim()) {
+                    combinedText =
+                        `Halaman berhasil diambil.
 
 Tidak ditemukan selector:
 
 article p`;
-      }
+                }
 
-      document.getElementById("hasil").innerText =
-`✓ PROXY BERHASIL
+                document.getElementById("hasil").innerText =
+                    `✓ PROXY BERHASIL
 
 Nama : ${proxyBerhasil}
 URL  : ${proxyUrl}
@@ -287,29 +304,30 @@ Waktu: ${new Date().toLocaleString()}
 ==========
 
 ${combinedText}`;
-    } catch (error) {
-      document.getElementById("hasil").innerText =
-`❌ GAGAL MENGAMBIL DATA
+            } catch (error) {
+                document.getElementById("hasil").innerText =
+                    `❌ GAGAL MENGAMBIL DATA
 
 ${error.message}`;
-    } finally {
-      document.getElementById("loadingOverlay").style.display = "none";
-    }
-  }
+            } finally {
+                document.getElementById("loadingOverlay").style.display = "none";
+            }
+        }
 
-  function ubahWarnaTeks(event) {
-    const color = event.target.value;
-    document.getElementById("hasil").style.color = color;
-  }
+        function ubahWarnaTeks(event) {
+            const color = event.target.value;
+            document.getElementById("hasil").style.color = color;
+        }
 
-  function ubahGradient() {
-    const atas = document.getElementById("bgTopColor").value;
-    const bawah = document.getElementById("bgBottomColor").value;
-    const hasil = document.getElementById("hasil");
+        function ubahGradient() {
+            const atas = document.getElementById("bgTopColor").value;
+            const bawah = document.getElementById("bgBottomColor").value;
+            const hasil = document.getElementById("hasil");
 
-    hasil.style.background =
-      `linear-gradient(to bottom, ${atas} 20%, ${bawah} 20%)`;
-  }
-      </script>
-  </body>
+            hasil.style.background =
+                `linear-gradient(to bottom, ${atas} 20%, ${bawah} 20%)`;
+        }
+    </script>
+</body>
+
 </html>
