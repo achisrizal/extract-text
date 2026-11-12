@@ -3,9 +3,21 @@
 
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
     <title>~</title>
     <style>
+        *,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+        
         /* Selalu menggunakan Dark Mode */
         body {
             font-family: Arial, sans-serif;
@@ -47,35 +59,32 @@
         }
 
         input[type="text"] {
-            flex: 1;
-            /* Input akan mengisi ruang yang tersedia */
-            max-width: 400px;
-            /* Lebar maksimum input */
-            min-width: 100px;
-            /* Lebar minimum input */
-            background-color: #333;
-            /* Latar belakang gelap untuk input */
-            color: #252525;
-            border: 1px solid #444;
+    flex: 1 1 100%;
+    max-width: 400px;
+    min-width: 0;
+    width: 100%;
+    background-color: #333;
+    color: #252525;
+    border: 1px solid #444;
         }
 
         #hasil {
-            margin-top: 20px;
-            white-space: pre-wrap;
-            /* Agar teks tampil dengan baris baru */
-            font-family: monospace;
-            background: linear-gradient(to bottom,
-                    #444 20%,
-                    #333 20%);
-            /* Latar belakang gelap untuk hasil */
-            color: #121212;
-            padding: 10px;
-            border-radius: 4px;
-            font-size: 16px;
-            max-height: 30vh;
-            /* Mengatur tinggi maksimal sesuai tinggi layar */
-            overflow-y: auto;
-            /* Jika teks melebihi tinggi, maka akan muncul scrollbar */
+    margin-top: 20px;
+    width: 100%;
+    max-width: 100%;
+    white-space: pre-wrap;
+    /* Potong kata/URL panjang agar tidak melebihi layar */
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    font-family: monospace;
+    background: linear-gradient(to bottom, #444 20%, #333 20%);
+    color: #121212;
+    padding: 10px;
+    border-radius: 4px;
+    font-size: 16px;
+    max-height: 30vh;
+    overflow-y: auto;
+    overflow-x: hidden;
         }
 
         .color-picker {
