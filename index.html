@@ -265,7 +265,7 @@ ${err.message}`
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(htmlContent, "text/html");
 
-                const pElements = doc.querySelectorAll("article p");
+                const pElements = doc.querySelectorAll("article");
 
                 const aElements = doc.querySelectorAll(
                     ".main-pagination a, .navigate-posts a"
