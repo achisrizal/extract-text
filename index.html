@@ -141,7 +141,8 @@
 <body>
     <div class="form-container">
         <input type="text" id="urlInput" />
-        <button onclick="ambilTeks()">Get</button>
+        <button onclick="ambilTeks(true)">Get</button>
+        <button onclick="ambilTeks(false)">Get Direct</button>
 
         <div class="color-picker">
             <input type="color" id="textColor" value="#333333" onchange="ubahWarnaTeks(event)" />
@@ -245,7 +246,49 @@ ${err.message}`
             );
         }
 
-        async function ambilTeks() {
+        // innerText pada dokumen hasil DOMParser tidak mengenal layout,
+        // sehingga paragraf menyatu. Ambil teks per elemen blok secara manual.
+        function ekstrakParagraf(root) {
+            const el = root.cloneNode(true);
+            el.querySelectorAll("script, style, noscript, iframe, form").forEach((n) => n.remove());
+            el.querySelectorAll("br").forEach((br) => br.replaceWith("\n"));
+
+            const SEL = "p, div, h1, h2, h3, h4, h5, h6, li, blockquote, pre";
+            const blok = el.querySelectorAll(SEL);
+            const hasil = [];
+
+            blok.forEach((b) => {
+                // lewati blok yang membungkus blok lain (hindari teks ganda)
+                if (b.querySelector(SEL)) return;
+                const t = b.textContent.replace(/[ \t ]+/g, " ").replace(/ ?\n ?/g, "\n").trim();
+                if (t) hasil.push(t);
+            });
+
+            // fallback bila tidak ada tag paragraf (misal teks dipisah <br>)
+            if (!hasil.length) {
+                return el.textContent.replace(/[ \t ]+/g, " ").replace(/\n{3,}/g, "\n\n").trim();
+            }
+            return hasil.join("\n\n");
+        }
+
+        // URL Cloudflare Worker pribadi (lihat worker.js). Isi setelah deploy.
+        const WORKER_URL = "https://text.somethingdevelopment.workers.dev/";
+
+        // Fetch lewat Worker pribadi (bukan proxy publik)
+        async function fetchLangsung(url) {
+            if (!/^https?:\/\//i.test(url)) url = "https://" + url;
+            if (WORKER_URL.includes("NAMA-WORKER")) {
+                throw new Error("WORKER_URL belum diisi di index.html");
+            }
+            const workerUrl = `${WORKER_URL}?url=${encodeURIComponent(url)}`;
+            const response = await fetch(workerUrl, { signal: AbortSignal.timeout(15000) });
+            if (!response.ok) {
+                throw new Error(`STATUS : ${response.status} ${response.statusText}\nURL    : ${workerUrl}\n\n${await response.text()}`);
+            }
+            return { proxy: "Worker pribadi", proxyUrl: workerUrl, html: await response.text() };
+        }
+
+        async function ambilTeks(pakaiProxy = true) {
             const url = document.getElementById("urlInput").value.trim();
 
             if (!url) {
@@ -256,7 +299,9 @@ ${err.message}`
             document.getElementById("loadingOverlay").style.display = "flex";
 
             try {
-                const result = await fetchDenganFallback(url);
+                const result = pakaiProxy
+                    ? await fetchDenganFallback(url)
+                    : await fetchLangsung(url);
 
                 const proxyBerhasil = result.proxy;
                 const proxyUrl = result.proxyUrl;
@@ -274,7 +319,7 @@ ${err.message}`
                 let combinedText = "";
 
                 pElements.forEach((p) => {
-                    combinedText += p.innerText + "\n\n";
+                    combinedText += ekstrakParagraf(p) + "\n\n";
                 });
 
                 aElements.forEach((a) => {
@@ -291,7 +336,7 @@ ${err.message}`
 
 Tidak ditemukan selector:
 
-article p`;
+article`;
                 }
 
                 document.getElementById("hasil").innerText =
